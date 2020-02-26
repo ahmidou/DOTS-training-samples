@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [GenerateAuthoringComponent]
-public struct Mover : IComponentData
+public struct Overtake : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -20,12 +20,9 @@ public struct Mover : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
 
-    // Initial speed
-    public float baseSpeed;
-    // current speed
-    public float speed;
-
     public int currentLane;
-
-    public float distanceOnLane;
-}
+    public int futureLane;
+    public float laneChangeSpeed;
+    public float laneChangeRatio;
+    //, delta time   currentlane, futurelane, lane change ratio
+}   

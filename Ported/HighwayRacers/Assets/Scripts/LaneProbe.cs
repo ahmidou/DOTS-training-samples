@@ -3,8 +3,8 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
-[GenerateAuthoringComponent]
-public struct SpeedLimit : IComponentData
+[Serializable]
+public struct LaneProbe : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -19,7 +19,6 @@ public struct SpeedLimit : IComponentData
     // * You should focus on the data structure that makes the most sense
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
-
-    public float speed;
-    public float distanceOnLane;
+    public int currentLane;
+    public int futurelane;  
 }

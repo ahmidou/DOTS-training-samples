@@ -21,6 +21,7 @@ public struct Track : IComponentData
     //   authoring the data in the Editor.
     public int laneCount;
     public float length;
+    //public 
     
     
 }
