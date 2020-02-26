@@ -5,6 +5,8 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using static Unity.Mathematics.math;
+using UnityEngine;
+
 
 public class MoverSystem : JobComponentSystem
 {
@@ -16,18 +18,15 @@ public class MoverSystem : JobComponentSystem
     //
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
-    [BurstCompile]
+    //[BurstCompile]
     struct MoverSystemJob : IJobForEach<Mover>
     {
         // Add fields here that your job needs to do its work.
         // For example,
         public float deltaTime;
-        public float speed;
-        public float distanceOnLane;
+        public float highwayLength;
         
-        
-        
-        public void Execute(ref Mover rotation)
+        public void Execute(ref Mover mover)
         {
             // Implement the work to perform for each entity here.
             // You should only access data that is local or that is a
@@ -37,7 +36,11 @@ public class MoverSystem : JobComponentSystem
             // that want to read Rotation component data.
             // For example,
             //  translation.Value += mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
-            distanceOnLane += speed * deltaTime;
+
+            mover.distanceOnLane += mover.speed * deltaTime;
+            if (highwayLength < mover.distanceOnLane)
+                mover.distanceOnLane = 0;
+            Debug.Log(mover.distanceOnLane);
             
             
         }
@@ -51,6 +54,9 @@ public class MoverSystem : JobComponentSystem
         // everything it needs to do its work when it runs later.
         // For example,
         job.deltaTime = UnityEngine.Time.deltaTime;
+        job.highwayLength = 100; //temp
+
+        
         
         
         
