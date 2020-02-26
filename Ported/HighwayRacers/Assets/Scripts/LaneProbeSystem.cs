@@ -5,10 +5,8 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using static Unity.Mathematics.math;
-using UnityEngine;
 
-
-public class MoverSystem : JobComponentSystem
+public class LaneProbeSystem : JobComponentSystem
 {
     // This declares a new kind of job, which is a unit of work to do.
     // The job is declared as an IJobForEach<Translation, Rotation>,
@@ -18,15 +16,16 @@ public class MoverSystem : JobComponentSystem
     //
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
-    //[BurstCompile]
-    struct MoverSystemJob : IJobForEach<Mover, Translation>
+    [BurstCompile]
+    struct LaneProbeSystemJob : IJobForEach<Translation, Rotation>
     {
         // Add fields here that your job needs to do its work.
         // For example,
-        public float deltaTime;
-        public Track track;
+        //    public float deltaTime;
         
-        public void Execute(ref Mover mover, ref Translation position)
+        
+        
+        public void Execute(ref Translation translation, [ReadOnly] ref Rotation rotation)
         {
             // Implement the work to perform for each entity here.
             // You should only access data that is local or that is a
@@ -35,13 +34,7 @@ public class MoverSystem : JobComponentSystem
             // but allows this job to run in parallel with other jobs
             // that want to read Rotation component data.
             // For example,
-            //  translation.Value += mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
-
-            mover.distanceOnLane += mover.speed * deltaTime;
-            if (track.length < mover.distanceOnLane)
-                mover.distanceOnLane = 0;
-            Debug.Log(mover.distanceOnLane);
-            position.Value = new float3(mover.distanceOnLane, 0, 0);
+            //     translation.Value += mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
             
             
         }
@@ -49,15 +42,14 @@ public class MoverSystem : JobComponentSystem
     
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
+        var job = new LaneProbeSystemJob();
         
-        var job = new MoverSystemJob();
-        EntityQuery m_Group = GetEntityQuery(typeof(Track));
-        var track = m_Group.GetSingleton<Track>();
         // Assign values to the fields on your job here, so that it has
         // everything it needs to do its work when it runs later.
         // For example,
-        job.deltaTime = UnityEngine.Time.deltaTime;
-        job.track = track;
+        //     job.deltaTime = UnityEngine.Time.deltaTime;
+        
+        
         
         // Now that the job is set up, schedule it to be run. 
         return job.Schedule(this, inputDependencies);

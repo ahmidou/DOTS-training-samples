@@ -25,8 +25,7 @@ public struct Mover : IComponentData
     // current speed
     public float speed;
 
-    public float distanceOnLane;
     public int currentLane;
 
-
+    public float distanceOnLane;
 }

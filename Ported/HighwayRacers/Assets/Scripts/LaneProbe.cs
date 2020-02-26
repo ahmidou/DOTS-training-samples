@@ -3,8 +3,8 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
-[GenerateAuthoringComponent]
-public struct Track : IComponentData
+[Serializable]
+public struct LaneProbe : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -19,9 +19,6 @@ public struct Track : IComponentData
     // * You should focus on the data structure that makes the most sense
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
-    public int laneCount;
-    public float length;
-    //public 
-    
-    
+    public int currentLane;
+    public int futurelane;  
 }
