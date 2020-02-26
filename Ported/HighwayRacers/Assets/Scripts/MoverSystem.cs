@@ -40,7 +40,7 @@ public class MoverSystem : JobComponentSystem
             mover.distanceOnLane += mover.speed * deltaTime;
             if (highwayLength < mover.distanceOnLane)
                 mover.distanceOnLane = 0;
-            Debug.Log(mover.distanceOnLane);
+            //Debug.Log(mover.distanceOnLane);
             
             
         }
