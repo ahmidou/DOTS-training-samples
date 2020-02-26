@@ -20,7 +20,6 @@ public struct SpeedLimit : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
 
-    public float speedLimit;
-    
-    
+    public float speed;
+    public float distanceOnLane;
 }
