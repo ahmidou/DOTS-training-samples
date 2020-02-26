@@ -21,15 +21,17 @@ public class HighWay : MonoBehaviour
         for (var x = 0; x < 20; x++)
         {
 
-                // Efficiently instantiate a bunch of entities from the already converted entity prefab
-                var instance = entityManager.Instantiate(prefab);   
+            // Efficiently instantiate a bunch of entities from the already converted entity prefab
+            var instance = entityManager.Instantiate(prefab);   
 
-                // Place the instantiated entity in a grid with some noise
-                var position = new Vector3((float)UnityEngine.Random.Range(0, 100), 0 ,0);
-                var speed = UnityEngine.Random.Range(1.0f, 10.0f);
-                entityManager.AddComponent<Mover>(instance);
-                entityManager.SetComponentData(instance, new Mover { speed = speed });
-                entityManager.SetComponentData(instance, new Translation { Value = position });
+            // Place the instantiated entity in a grid with some noise
+            var position = new Vector3((float)UnityEngine.Random.Range(0, 200), 0 ,0);
+            //Debug.Log(position);
+            var speed = UnityEngine.Random.Range(10.0f, 20.0f); 
+            entityManager.AddComponent<Mover>(instance);
+            entityManager.AddComponent<SpeedLimit>(instance);
+            entityManager.SetComponentData(instance, new Mover { speed = speed, distanceOnLane=position.x });
+            entityManager.SetComponentData(instance, new Translation { Value = position });
         }
     }
 

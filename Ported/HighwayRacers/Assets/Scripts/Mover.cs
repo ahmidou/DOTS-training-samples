@@ -28,7 +28,4 @@ public struct Mover : IComponentData
     public int currentLane;
 
     public float distanceOnLane;
-    public int currentLane;
-
-
 }
