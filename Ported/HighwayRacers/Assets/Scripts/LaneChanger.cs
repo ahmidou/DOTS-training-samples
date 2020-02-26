@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [GenerateAuthoringComponent]
-public struct Mover : IComponentData
+public struct LaneChanger : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -20,15 +20,13 @@ public struct Mover : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
 
-    // Initial speed
-    public float baseSpeed;
-    // current speed
+    public float distanceOnLane;
     public float speed;
 
-    public int currentLane;
+    public int currentlane;
+    public int futurelane;
 
-    public float distanceOnLane;
-    public int currentLane;
-
-
+    public bool leftLaneFree;
+    public bool currentLaneFree;
+    public bool rightLaneFree;
 }

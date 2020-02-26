@@ -7,6 +7,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using static Unity.Mathematics.math;
+using UnityEngine;
 
 public class SpeedLimiter : JobComponentSystem
 {
@@ -25,13 +26,12 @@ public class SpeedLimiter : JobComponentSystem
     //
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
-    [BurstCompile]
+    //[BurstCompile]
     struct SpeedLimiterJob : IJobForEach<SpeedLimit>
     {
         // Add fields here that your job needs to do its work.
-        [ReadOnly] [DeallocateOnJobCompletion] public NativeArray<Mover> movers;
-        public float speed;
-        public float distanceOnLane;
+        [DeallocateOnJobCompletion] public NativeArray<Mover> movers;
+        public static float trackInvLength;
         static readonly float minDistanceToLimit = 10.0f;
 
         public void Execute(ref SpeedLimit limitInfos)
@@ -47,39 +47,51 @@ public class SpeedLimiter : JobComponentSystem
 
             movers.Sort(new sortMoverAscendingDistanceComparer());
 
-            for (int i = 0; i < movers.Length; i++)
+            for (int iMover = 0; iMover < movers.Length; iMover++)
             {
-                if (i + 1 < movers.Length)
+                int sameLanePredecessor = iMover + 1;
+
+                if(sameLanePredecessor < movers.Length && movers[sameLanePredecessor].currentLane == movers[iMover].currentLane)
                 {
-                    var d = movers[i + 1].distanceOnLane - movers[i].distanceOnLane;
-                    if(d > minDistanceToLimit)
+                    var d = movers[sameLanePredecessor].distanceOnLane - movers[iMover].distanceOnLane;
+                    if(d < minDistanceToLimit)
                     {
                         Mover updatedMover = new Mover()
                         {
-                            speed = movers[i + 1].speed ,
-                            distanceOnLane = movers[i].distanceOnLane
+                            speed = movers[sameLanePredecessor].speed ,
+                            distanceOnLane = movers[iMover].distanceOnLane
                         };
-                        movers[i] = updatedMover ;
+                        movers[iMover] = updatedMover ;
+                        //Debug.Log("<Limiting mover>"+i);
                     }
                 }
             }
-
         }
 
         public struct sortMoverAscendingDistanceComparer : System.Collections.Generic.IComparer<Mover>
         {
             public int Compare(Mover a, Mover b)
             {
-                return a.distanceOnLane.CompareTo(b.distanceOnLane);
+                float da = a.distanceOnLane * SpeedLimiterJob.trackInvLength;
+                float db = b.distanceOnLane * SpeedLimiterJob.trackInvLength;
+                return a.currentLane.CompareTo(b.currentLane) * 10 + da.CompareTo(db);
             }
         }
     }
     
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
+
+        EntityQuery m_Group = GetEntityQuery(typeof(Track));
+        var track = m_Group.GetSingleton<Track>();
+        SpeedLimiterJob.trackInvLength = 1.0f / track.length;
+
         var movers = m_Query.ToComponentDataArray<Mover>(Allocator.TempJob);
 
-        var job = new SpeedLimiterJob() { movers = movers };
+        var job = new SpeedLimiterJob()
+        {
+            movers = movers
+        };
 
         // Assign values to the fields on your job here, so that it has
         // everything it needs to do its work when it runs later.
