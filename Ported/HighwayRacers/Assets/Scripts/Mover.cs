@@ -19,7 +19,12 @@ public struct Mover : IComponentData
     // * You should focus on the data structure that makes the most sense
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
+
+    // Initial speed
+    public float baseSpeed;
+    // current speed
     public float speed;
+
     public float distanceOnLane;
 
 
