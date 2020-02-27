@@ -36,21 +36,19 @@ public class OvertakeSystem : JobComponentSystem
             // For example,
             //     translation.Value += mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
 
-            if (o.laneChangeRatio < 0.0f)
+            if (o.drivingBehavior == Mover.DrivingBehavior.Overtake || o.drivingBehavior == Mover.DrivingBehavior.MergeRight)
             {
-                // Component has just been activated
-                o.laneChangeRatio = 0.0f;
-            }
-            if (o.laneChangeRatio < 1.0f)
-            {
-                // Regular case, update overtake stuff
-                o.laneChangeRatio += deltaTime * o.laneChangeSpeed;
-            }
-            else
-            {
-                // Overtake complete
-                o.currentLane = o.futureLane;
-            }
+                if (o.futureLane != o.currentLane)
+                {
+                    o.laneChangeRatio += deltaTime * o.laneChangeSpeed;
+
+                    if (o.laneChangeRatio >= 1.0f)
+                    {
+                        o.futureLane = o.currentLane;
+                        o.laneChangeRatio = 0.0f;
+                    }
+                }
+            }    
         }
     }
 
