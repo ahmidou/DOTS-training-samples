@@ -40,7 +40,7 @@ public class MoverSystem : JobComponentSystem
             mover.distanceOnLane += mover.speed * deltaTime;
             if (track.length < mover.distanceOnLane)
                 mover.distanceOnLane = 0;
-            Debug.Log(mover.distanceOnLane);
+           // Debug.Log(mover.distanceOnLane);
             position.Value = new float3(mover.distanceOnLane, 0, 0);
             
             
