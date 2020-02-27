@@ -19,6 +19,15 @@ public struct LaneProbe : IComponentData
     // * You should focus on the data structure that makes the most sense
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
-    public int currentLane;
-    public int futurelane;  
+    public bool leftLaneAvailable;
+    public bool currentLaneAvailable;
+    public bool rightLaneAvailable;
+
+    public bool StopProbbing()
+    {
+        return leftLaneAvailable == false &&
+            currentLaneAvailable == false &&
+            rightLaneAvailable == false;
+    }
+
 }

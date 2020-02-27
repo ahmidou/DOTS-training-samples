@@ -30,8 +30,10 @@ public class HighWay : MonoBehaviour
             var speed = UnityEngine.Random.Range(10.0f, 20.0f); 
             entityManager.AddComponent<Mover>(instance);
             entityManager.AddComponent<SpeedLimit>(instance);
+            entityManager.AddComponent<LaneProbe>(instance);
             entityManager.SetComponentData(instance, new Mover { speed = speed, distanceOnLane=position.x });
             entityManager.SetComponentData(instance, new Translation { Value = position });
+            entityManager.SetComponentData(instance, new LaneProbe());
         }
     }
 

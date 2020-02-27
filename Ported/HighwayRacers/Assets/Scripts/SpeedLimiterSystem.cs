@@ -22,7 +22,8 @@ public class SpeedLimiter : JobComponentSystem
     {
         EntityQuery m_Group = GetEntityQuery(typeof(Track));
         var track = m_Group.GetSingleton<Track>();
-        var movers = m_Query.ToComponentDataArray<Mover>(Allocator.TempJob);
+        var movers = m_Query.ToComponentDataArray<Mover>(Allocator.TempJob\
+            );
 
         var jobHandle = Entities
             .ForEach((Entity entity, ref Mover mine, ref SpeedLimit limitInfos) =>
