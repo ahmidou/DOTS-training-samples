@@ -21,7 +21,7 @@ public class CircularizeSystem : JobComponentSystem
     {
         // Add fields here that your job needs to do its work.
         // For example,
-        //    public float deltaTime;
+        public float trackLength;
         
         
         
@@ -36,13 +36,19 @@ public class CircularizeSystem : JobComponentSystem
             // For example,
             //     translation.Value += mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
 
-            translation.Value = new float3(myMover.distanceOnLane, 0, 4.0f * (float)myMover.currentLane);
+            //translation.Value = new float3(myMover.distanceOnLane, 0, 4.0f * (float)myMover.currentLane);
+            float angle = myMover.distanceOnLane / (math.PI * 2f);
+            float laneWidth = 2f;
+            float radius = trackLength / (math.PI * 2f) + myMover.currentLane * laneWidth;
+            translation.Value = new float3(math.cos(angle), 0f, math.sin(angle)) * radius;
         }
     }
     
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
-        var job = new CircularizeSystemJob();
+        EntityQuery m_Group = GetEntityQuery(typeof(Track));
+        var track = m_Group.GetSingleton<Track>();
+        var job = new CircularizeSystemJob() { trackLength = track.length };
         
         // Assign values to the fields on your job here, so that it has
         // everything it needs to do its work when it runs later.
