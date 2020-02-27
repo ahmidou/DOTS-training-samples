@@ -48,7 +48,8 @@ public class HighWay : MonoBehaviour
             var speed = UnityEngine.Random.Range(minSpeed, maxSpeed); 
             entityManager.AddComponent<Mover>(instance);
             entityManager.AddComponent<MaterialColor>(instance);
-            entityManager.SetComponentData(instance, new Mover { speed = speed, distanceOnLane=position.x, currentLane= UnityEngine.Random.Range(0, 4), baseSpeed=speed });
+            int currentLane = UnityEngine.Random.Range(0, 4);
+            entityManager.SetComponentData(instance, new Mover { speed = speed, distanceOnLane=position.x, currentLane = currentLane, futureLane = currentLane, baseSpeed=speed });
             entityManager.SetComponentData(instance, new Translation { Value = position });
         }
     }
