@@ -39,7 +39,7 @@ public class CircularizeSystem : JobComponentSystem
             //translation.Value = new float3(myMover.distanceOnLane, 0, 4.0f * (float)myMover.currentLane);
             float angle = math.PI * 2f * myMover.distanceOnLane / trackLength;
             float laneWidth = 2f;
-            float laneOffset = math.lerp(myMover.currentLane, myMover.futureLane, 0f) * laneWidth;
+            float laneOffset = math.lerp(myMover.currentLane, myMover.futureLane, myMover.laneChangeRatio) * laneWidth;
             float radius = trackLength / (math.PI * 2f) + laneOffset;
             translation.Value = new float3(math.cos(angle), 0f, math.sin(angle)) * radius;
             rotation.Value = Unity.Mathematics.quaternion.AxisAngle(math.up(), -angle);
