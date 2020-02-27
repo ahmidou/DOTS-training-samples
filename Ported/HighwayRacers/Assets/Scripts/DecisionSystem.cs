@@ -36,15 +36,27 @@ public class DecisionSystem : JobComponentSystem
             // For example,
             //     translation.Value += mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
 
-
-            if (myMover.rightLaneAvailable)
-                myMover.drivingBehavior = Mover.DrivingBehavior.MergeRight;
-            else if (myMover.currentLaneAvailable)
-                myMover.drivingBehavior = Mover.DrivingBehavior.Regular;
-            else if (myMover.leftLaneAvailable)
-                myMover.drivingBehavior = Mover.DrivingBehavior.Overtake;
-            else
-                myMover.drivingBehavior = Mover.DrivingBehavior.LimitSpeed;
+            if(myMover.futureLane == myMover.currentLane)
+            {
+                if (myMover.rightLaneAvailable)
+                {
+                    myMover.drivingBehavior = Mover.DrivingBehavior.MergeRight;
+                    myMover.futureLane--;
+                }
+                else if (myMover.currentLaneAvailable)
+                {
+                    myMover.drivingBehavior = Mover.DrivingBehavior.Regular;
+                }
+                else if (myMover.leftLaneAvailable)
+                {
+                    myMover.drivingBehavior = Mover.DrivingBehavior.Overtake;
+                    myMover.futureLane++;
+                }
+                else
+                {
+                    myMover.drivingBehavior = Mover.DrivingBehavior.LimitSpeed;
+                }
+            }
         }
     }
     
