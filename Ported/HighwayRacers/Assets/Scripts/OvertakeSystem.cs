@@ -44,7 +44,7 @@ public class OvertakeSystem : JobComponentSystem
 
                     if (o.laneChangeRatio >= 1.0f)
                     {
-                        o.futureLane = o.currentLane;
+                        o.currentLane = o.futureLane;
                         o.laneChangeRatio = 0.0f;
                     }
                 }
