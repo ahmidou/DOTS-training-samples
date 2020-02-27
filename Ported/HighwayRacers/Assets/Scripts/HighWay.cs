@@ -9,6 +9,12 @@ using Unity.Transforms;
 public class HighWay : MonoBehaviour
 {
     public GameObject Prefab;
+    public int laneCount = 4;
+    public float length = 200;
+    public int carCount = 20;
+    public float minSpeed = 10.0f;
+    public float maxSpeed = 20.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,19 +24,23 @@ public class HighWay : MonoBehaviour
         var prefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(Prefab, settings);
         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-        for (var x = 0; x < 20; x++)
+        var singletonEntity = entityManager.CreateEntity(typeof(Track));
+        var singletonGroup = entityManager.CreateEntityQuery(typeof(Track));
+        singletonGroup.SetSingleton<Track>(new Track { laneCount = laneCount, length = length });
+
+        for (var x = 0; x < carCount; x++)
         {
 
             // Efficiently instantiate a bunch of entities from the already converted entity prefab
             var instance = entityManager.Instantiate(prefab);   
 
             // Place the instantiated entity in a grid with some noise
-            var position = new Vector3((float)UnityEngine.Random.Range(0, 200), 0 ,0);
+            var position = new Vector3((float)UnityEngine.Random.Range(0, length), 0 ,0);
             //Debug.Log(position);
-            var speed = UnityEngine.Random.Range(10.0f, 20.0f); 
+            var speed = UnityEngine.Random.Range(minSpeed, maxSpeed); 
             entityManager.AddComponent<Mover>(instance);
             entityManager.AddComponent<SpeedLimit>(instance);
-            entityManager.SetComponentData(instance, new Mover { speed = speed, distanceOnLane=position.x });
+            entityManager.SetComponentData(instance, new Mover { speed = speed, distanceOnLane=position.x, currentLane= UnityEngine.Random.Range(0, 4) });
             entityManager.SetComponentData(instance, new Translation { Value = position });
         }
     }
