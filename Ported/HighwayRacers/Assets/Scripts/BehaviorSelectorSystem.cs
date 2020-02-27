@@ -17,14 +17,14 @@ public class LaneChangerSystem : JobComponentSystem
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
     [BurstCompile]
-    struct LaneChangerSystemJob : IJobForEach<LaneChanger>
+    struct LaneChangerSystemJob : IJobForEach<Mover>
     {
         // Add fields here that your job needs to do its work.
         // For example,
         //    public float deltaTime;
         public float deltaTime;
 
-        public void Execute(ref LaneChanger o)
+        public void Execute(ref Mover o)
         {
             // Implement the work to perform for each entity here.
             // You should only access data that is local or that is a

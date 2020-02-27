@@ -17,7 +17,7 @@ public class OvertakeSystem : JobComponentSystem
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
     [BurstCompile]
-    struct OvertakeSystemJob : IJobForEach<Overtake>
+    struct OvertakeSystemJob : IJobForEach<Mover>
     {
         // Add fields here that your job needs to do its work.
         // For example,
@@ -25,7 +25,7 @@ public class OvertakeSystem : JobComponentSystem
         public float deltaTime;
 
 
-        public void Execute(ref Overtake o)
+        public void Execute(ref Mover o)
         {
             // Implement the work to perform for each entity here.
             // You should only access data that is local or that is a

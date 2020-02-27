@@ -25,7 +25,7 @@ public class SpeedLimiter : JobComponentSystem
         var movers = m_Query.ToComponentDataArray<Mover>(Allocator.TempJob);
 
         var jobHandle = Entities
-            .ForEach((Entity entity, ref Mover mine, ref SpeedLimit limitInfos) =>
+            .ForEach((Entity entity, ref Mover mine) =>
             {
                 float smallest = track.minDistanceToSlowDown;
                 int closest = -1;
