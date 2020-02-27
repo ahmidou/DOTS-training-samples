@@ -33,7 +33,7 @@ public class LaneProbeSystem : JobComponentSystem
                 var currentNormalizedDistance = referenceMover.distanceOnLane / (track.length * (float)System.Math.Pow(track.laneDistanceMultiplier,(double)referenceMover.currentLane));
                 var smallestDistanceToBrake = track.minDistanceToSlowDown / track.length;
 
-                Debug.Log("currentNormalizedDistance:" + currentNormalizedDistance.ToString() + "lane:"+ referenceMover.currentLane.ToString());
+              
                 for (int i = 0; i < movers.Length; i++)
                 {
                     var normalizedDistance =  movers[i].distanceOnLane / (track.length * (float)System.Math.Pow(track.laneDistanceMultiplier, (double)movers[i].currentLane));
@@ -58,8 +58,10 @@ public class LaneProbeSystem : JobComponentSystem
                         if (referenceMover.leftLaneAvailable)
                         {
                             float d = normalizedDistance - currentNormalizedDistance;
-                            if (abs(d) < track.minDistanceToSlowDown * 2.0f)
+                            if (abs(d) < smallestDistanceToBrake * 2.0f)
                             {
+                                //string s = string.Format("cur:{0} = other:{1} Dist:{2}", referenceMover.currentLane, movers[i].currentLane, d);
+                                //Debug.Log(s);
                                 referenceMover.leftLaneAvailable = false;
                             }
                         }
@@ -71,7 +73,7 @@ public class LaneProbeSystem : JobComponentSystem
                         if (referenceMover.rightLaneAvailable)
                         {
                             float d = normalizedDistance - currentNormalizedDistance;
-                            if (abs(d) < track.minDistanceToSlowDown * 2.0f)
+                            if (abs(d) < smallestDistanceToBrake * 2.0f)
                             {
                                 referenceMover.rightLaneAvailable = false;
                             }
