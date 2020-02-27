@@ -45,7 +45,7 @@ public class TrackSystem : JobComponentSystem
         var entityManager = World.EntityManager;
         var singletonEntity = entityManager.CreateEntity(typeof(Track));
         var singletonGroup = entityManager.CreateEntityQuery(typeof(Track));
-        singletonGroup.SetSingleton<Track>(new Track { laneCount = 4, length = 200 });
+        singletonGroup.SetSingleton<Track>(new Track { laneCount = 4, length = 200 , minDistanceToSlowDown = 2.0f});
 
     }
 
