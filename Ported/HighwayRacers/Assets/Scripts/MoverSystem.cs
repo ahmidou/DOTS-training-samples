@@ -19,14 +19,14 @@ public class MoverSystem : JobComponentSystem
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
     //[BurstCompile]
-    struct MoverSystemJob : IJobForEach<Mover, Translation>
+    struct MoverSystemJob : IJobForEach<Mover>
     {
         // Add fields here that your job needs to do its work.
         // For example,
         public float deltaTime;
         public Track track;
         
-        public void Execute(ref Mover mover, ref Translation position)
+        public void Execute(ref Mover mover)
         {
             // Implement the work to perform for each entity here.
             // You should only access data that is local or that is a
@@ -40,10 +40,7 @@ public class MoverSystem : JobComponentSystem
             mover.distanceOnLane += mover.speed * deltaTime;
             if (track.length < mover.distanceOnLane)
                 mover.distanceOnLane = 0;
-           // Debug.Log(mover.distanceOnLane);
-            position.Value = new float3(mover.distanceOnLane, 0, 4.0f * (float)mover.currentLane);
-            
-            
+           // Debug.Log(mover.distanceOnLane);            
         }
     }
     
