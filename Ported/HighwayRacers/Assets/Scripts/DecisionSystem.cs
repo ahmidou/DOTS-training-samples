@@ -17,7 +17,7 @@ public class DecisionSystem : JobComponentSystem
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
     [BurstCompile]
-    struct DecisionSystemJob : IJobForEach<Translation, Rotation>
+    struct DecisionSystemJob : IJobForEach<Mover>
     {
         // Add fields here that your job needs to do its work.
         // For example,
@@ -25,7 +25,7 @@ public class DecisionSystem : JobComponentSystem
         
         
         
-        public void Execute(ref Translation translation, [ReadOnly] ref Rotation rotation)
+        public void Execute(ref Mover myMover)
         {
             // Implement the work to perform for each entity here.
             // You should only access data that is local or that is a
@@ -36,15 +36,15 @@ public class DecisionSystem : JobComponentSystem
             // For example,
             //     translation.Value += mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
 
-            /*
-            if (LaneProbe.RightAvailable)
-                DecisionSystem = goRight;
-            else if(LaneProbe.PlaceEhead)
-                DecisionSystem = Stay
-            else if (LaneProbe.RightAvailable)
-                DecisionSystem = goLeft
-            */
 
+            if (myMover.rightLaneAvailable)
+                myMover.drivingBehavior = Mover.DrivingBehavior.MergeRight;
+            else if (myMover.currentLaneAvailable)
+                myMover.drivingBehavior = Mover.DrivingBehavior.Regular;
+            else if (myMover.leftLaneAvailable)
+                myMover.drivingBehavior = Mover.DrivingBehavior.Overtake;
+            else
+                myMover.drivingBehavior = Mover.DrivingBehavior.LimitSpeed;
         }
     }
     
