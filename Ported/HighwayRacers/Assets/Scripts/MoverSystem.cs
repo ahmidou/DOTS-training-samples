@@ -18,7 +18,7 @@ public class MoverSystem : JobComponentSystem
     //
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
-    //[BurstCompile]
+    [BurstCompile]
     struct MoverSystemJob : IJobForEach<Mover>
     {
         // Add fields here that your job needs to do its work.
