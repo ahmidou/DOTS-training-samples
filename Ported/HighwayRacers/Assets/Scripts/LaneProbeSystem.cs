@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 using static Unity.Mathematics.math;
 
 public class LaneProbeSystem : JobComponentSystem
@@ -28,16 +29,22 @@ public class LaneProbeSystem : JobComponentSystem
                 referenceMover.currentLaneAvailable = true;
                 referenceMover.rightLaneAvailable = referenceMover.currentLane > 0;
 
-                float smallestDistanceToBrake = track.minDistanceToSlowDown;
+                // all distances are normalized in [0,1]
+                var currentNormalizedDistance = referenceMover.distanceOnLane / (track.length * (float)System.Math.Pow(track.laneDistanceMultiplier,(double)referenceMover.currentLane));
+                var smallestDistanceToBrake = track.minDistanceToSlowDown / track.length;
 
+                Debug.Log("currentNormalizedDistance:" + currentNormalizedDistance.ToString() + "lane:"+ referenceMover.currentLane.ToString());
                 for (int i = 0; i < movers.Length; i++)
                 {
+                    var normalizedDistance =  movers[i].distanceOnLane / (track.length * (float)System.Math.Pow(track.laneDistanceMultiplier, (double)movers[i].currentLane));
+
+
                     // Room ahead ?
                     if (movers[i].currentLane == referenceMover.currentLane)
                     {
                         if (referenceMover.currentLaneAvailable)
                         {
-                            float d = movers[i].distanceOnLane - referenceMover.distanceOnLane;
+                            float d = normalizedDistance - currentNormalizedDistance;
                             if (d > 0 && d < smallestDistanceToBrake)
                             {
                                 referenceMover.currentLaneAvailable = false;
@@ -50,7 +57,7 @@ public class LaneProbeSystem : JobComponentSystem
                     {
                         if (referenceMover.leftLaneAvailable)
                         {
-                            float d = movers[i].distanceOnLane - referenceMover.distanceOnLane;
+                            float d = normalizedDistance - currentNormalizedDistance;
                             if (abs(d) < track.minDistanceToSlowDown * 2.0f)
                             {
                                 referenceMover.leftLaneAvailable = false;
@@ -58,11 +65,12 @@ public class LaneProbeSystem : JobComponentSystem
                         }
                     }
 
+                    // room on right
                     else if (movers[i].currentLane == referenceMover.currentLane - 1)
                     {
                         if (referenceMover.rightLaneAvailable)
                         {
-                            float d = movers[i].distanceOnLane - referenceMover.distanceOnLane;
+                            float d = normalizedDistance - currentNormalizedDistance;
                             if (abs(d) < track.minDistanceToSlowDown * 2.0f)
                             {
                                 referenceMover.rightLaneAvailable = false;
@@ -70,6 +78,7 @@ public class LaneProbeSystem : JobComponentSystem
                         }
                     }
 
+                    // Exits as soon as all decisions have been made
                     if(referenceMover.StopProbbing())
                     {
                         break;

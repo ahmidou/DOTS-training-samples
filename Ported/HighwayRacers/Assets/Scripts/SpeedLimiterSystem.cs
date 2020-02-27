@@ -32,7 +32,7 @@ public class SpeedLimiter : JobComponentSystem
                 int closest = -1;
                 for (int i = 0; i < movers.Length; i++)
                 {
-                    if (movers[i].distanceOnLane != mine.distanceOnLane)
+                    if (movers[i].distanceOnLane != mine.distanceOnLane && movers[i].currentLane == mine.currentLane)
                     {
                         float d = movers[i].distanceOnLane - mine.distanceOnLane;
                         if (d > 0 && d < smallest)

@@ -22,7 +22,8 @@ public struct Track : IComponentData
     public int laneCount;
     public float length;
     public float minDistanceToSlowDown;
-    //public 
 
+    // leftward lane length gets bigger to match curvature
+    public double laneDistanceMultiplier;
 
 }
