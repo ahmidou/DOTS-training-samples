@@ -33,7 +33,7 @@ public class LaneProbeSystem : JobComponentSystem
                 var currentNormalizedDistance = referenceMover.distanceOnLane / (track.length * (float)System.Math.Pow(track.laneDistanceMultiplier,(double)referenceMover.currentLane));
                 var smallestDistanceToBrake = track.minDistanceToSlowDown / track.length;
 
-                Debug.Log("currentNormalizedDistance:" + currentNormalizedDistance.ToString() + "lane:"+ referenceMover.currentLane.ToString());
+                //Debug.Log("currentNormalizedDistance:" + currentNormalizedDistance.ToString() + "lane:"+ referenceMover.currentLane.ToString());
                 for (int i = 0; i < movers.Length; i++)
                 {
                     var normalizedDistance =  movers[i].distanceOnLane / (track.length * (float)System.Math.Pow(track.laneDistanceMultiplier, (double)movers[i].currentLane));
