@@ -28,24 +28,31 @@ public class SpeedLimiter : JobComponentSystem
         var jobHandle = Entities
             .ForEach((Entity entity, ref Mover mine) =>
             {
-                float smallest = track.minDistanceToSlowDown;
-                int closest = -1;
-                for (int i = 0; i < movers.Length; i++)
+                if (mine.drivingBehavior == Mover.DrivingBehavior.LimitSpeed)
                 {
-                    if (movers[i].distanceOnLane != mine.distanceOnLane && movers[i].currentLane == mine.currentLane)
+                    float smallest = track.minDistanceToSlowDown;
+                    int closest = -1;
+                    for (int i = 0; i < movers.Length; i++)
                     {
-                        float d = movers[i].distanceOnLane - mine.distanceOnLane;
-                        if (d > 0 && d < smallest)
+                        if (movers[i].distanceOnLane != mine.distanceOnLane && movers[i].currentLane == mine.currentLane)
                         {
-                            smallest = d;
-                            closest = i;
+                            float d = movers[i].distanceOnLane - mine.distanceOnLane;
+                            if (d > 0 && d < smallest)
+                            {
+                                smallest = d;
+                                closest = i;
+                            }
                         }
                     }
-                }
 
-                if (closest >= 0)
+                    if (closest >= 0)
+                    {
+                        mine.speed = movers[closest].speed;
+                    }
+                }
+                else
                 {
-                    mine.speed = movers[closest].speed;
+                    mine.speed = mine.baseSpeed;
                 }
             })
             .Schedule(inputDependencies);
