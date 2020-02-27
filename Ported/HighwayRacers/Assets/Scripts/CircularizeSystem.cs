@@ -17,7 +17,7 @@ public class CircularizeSystem : JobComponentSystem
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
     [BurstCompile]
-    struct CircularizeSystemJob : IJobForEach<Translation, Mover>
+    struct CircularizeSystemJob : IJobForEach<Translation, Rotation, Mover>
     {
         // Add fields here that your job needs to do its work.
         // For example,
@@ -25,7 +25,7 @@ public class CircularizeSystem : JobComponentSystem
         
         
         
-        public void Execute(ref Translation translation, [ReadOnly] ref Mover myMover)
+        public void Execute(ref Translation translation, ref Rotation rotation, [ReadOnly] ref Mover myMover)
         {
             // Implement the work to perform for each entity here.
             // You should only access data that is local or that is a
@@ -39,8 +39,10 @@ public class CircularizeSystem : JobComponentSystem
             //translation.Value = new float3(myMover.distanceOnLane, 0, 4.0f * (float)myMover.currentLane);
             float angle = math.PI * 2f * myMover.distanceOnLane / trackLength;
             float laneWidth = 2f;
-            float radius = trackLength / (math.PI * 2f) + myMover.currentLane * laneWidth;
+            float laneOffset = math.lerp(myMover.currentLane, myMover.futureLane, 0f) * laneWidth;
+            float radius = trackLength / (math.PI * 2f) + laneOffset;
             translation.Value = new float3(math.cos(angle), 0f, math.sin(angle)) * radius;
+            rotation.Value = Unity.Mathematics.quaternion.AxisAngle(math.up(), -angle);
         }
     }
     
