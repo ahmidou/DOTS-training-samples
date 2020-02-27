@@ -12,9 +12,10 @@ public class HighWay : MonoBehaviour
     public int laneCount = 4;
     public float length = 200;
     public int carCount = 20;
-    public float minSpeed = 10.0f;
-    public float maxSpeed = 20.0f;
+    public float minSpeed = 1.0f/10.0f;
+    public float maxSpeed = 5.0f / 10.0f;
     public float minDistanceToSlowDown = 2.0f;
+    public float laneDistanceMultiplier = 1.03f;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +28,13 @@ public class HighWay : MonoBehaviour
 
         var singletonEntity = entityManager.CreateEntity(typeof(Track));
         var singletonGroup = entityManager.CreateEntityQuery(typeof(Track));
-        singletonGroup.SetSingleton<Track>(new Track { laneCount = laneCount, length = length, minDistanceToSlowDown = minDistanceToSlowDown });
+        singletonGroup.SetSingleton<Track>(
+            new Track {
+                laneCount = laneCount,
+                length = length,
+                minDistanceToSlowDown = minDistanceToSlowDown,
+                laneDistanceMultiplier = laneDistanceMultiplier
+            });
 
         for (var x = 0; x < carCount; x++)
         {
@@ -48,6 +55,5 @@ public class HighWay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 }
