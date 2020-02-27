@@ -37,7 +37,7 @@ public class CircularizeSystem : JobComponentSystem
             //     translation.Value += mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
 
             //translation.Value = new float3(myMover.distanceOnLane, 0, 4.0f * (float)myMover.currentLane);
-            float angle = myMover.distanceOnLane / (math.PI * 2f);
+            float angle = math.PI * 2f * myMover.distanceOnLane / trackLength;
             float laneWidth = 2f;
             float radius = trackLength / (math.PI * 2f) + myMover.currentLane * laneWidth;
             translation.Value = new float3(math.cos(angle), 0f, math.sin(angle)) * radius;
