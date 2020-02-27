@@ -8,50 +8,78 @@ using static Unity.Mathematics.math;
 
 public class LaneProbeSystem : JobComponentSystem
 {
-    // This declares a new kind of job, which is a unit of work to do.
-    // The job is declared as an IJobForEach<Translation, Rotation>,
-    // meaning it will process all entities in the world that have both
-    // Translation and Rotation components. Change it to process the component
-    // types you want.
-    //
-    // The job is also tagged with the BurstCompile attribute, which means
-    // that the Burst compiler will optimize it for the best performance.
-    [BurstCompile]
-    struct LaneProbeSystemJob : IJobForEach<Translation, Rotation>
+    EntityQuery m_Query;
+
+    protected override void OnCreate()
     {
-        // Add fields here that your job needs to do its work.
-        // For example,
-        //    public float deltaTime;
-        
-        
-        
-        public void Execute(ref Translation translation, [ReadOnly] ref Rotation rotation)
-        {
-            // Implement the work to perform for each entity here.
-            // You should only access data that is local or that is a
-            // field on this job. Note that the 'rotation' parameter is
-            // marked as [ReadOnly], which means it cannot be modified,
-            // but allows this job to run in parallel with other jobs
-            // that want to read Rotation component data.
-            // For example,
-            //     translation.Value += mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
-            
-            
-        }
+        m_Query = GetEntityQuery(typeof(Mover));
     }
-    
+
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
-        var job = new LaneProbeSystemJob();
-        
-        // Assign values to the fields on your job here, so that it has
-        // everything it needs to do its work when it runs later.
-        // For example,
-        //     job.deltaTime = UnityEngine.Time.deltaTime;
-        
-        
-        
-        // Now that the job is set up, schedule it to be run. 
-        return job.Schedule(this, inputDependencies);
+        EntityQuery m_Group = GetEntityQuery(typeof(Track));
+        var track = m_Group.GetSingleton<Track>();
+        var movers = m_Query.ToComponentDataArray<Mover>(Allocator.TempJob);
+
+        var jobHandle = Entities
+            .ForEach((Entity entity, ref Mover referenceMover) =>
+            {
+                referenceMover.leftLaneAvailable = referenceMover.currentLane + 1 < track.laneCount;
+                referenceMover.currentLaneAvailable = true;
+                referenceMover.rightLaneAvailable = referenceMover.currentLane > 0;
+
+                float smallestDistanceToBrake = track.minDistanceToSlowDown;
+
+                for (int i = 0; i < movers.Length; i++)
+                {
+                    // Room ahead ?
+                    if (movers[i].currentLane == referenceMover.currentLane)
+                    {
+                        if (referenceMover.currentLaneAvailable)
+                        {
+                            float d = movers[i].distanceOnLane - referenceMover.distanceOnLane;
+                            if (d > 0 && d < smallestDistanceToBrake)
+                            {
+                                referenceMover.currentLaneAvailable = false;
+                            }
+                        }
+                    }
+
+                    // room on left ?
+                    else if (movers[i].currentLane == referenceMover.currentLane + 1)
+                    {
+                        if (referenceMover.leftLaneAvailable)
+                        {
+                            float d = movers[i].distanceOnLane - referenceMover.distanceOnLane;
+                            if (abs(d) < track.minDistanceToSlowDown * 2.0f)
+                            {
+                                referenceMover.leftLaneAvailable = false;
+                            }
+                        }
+                    }
+
+                    else if (movers[i].currentLane == referenceMover.currentLane - 1)
+                    {
+                        if (referenceMover.rightLaneAvailable)
+                        {
+                            float d = movers[i].distanceOnLane - referenceMover.distanceOnLane;
+                            if (abs(d) < track.minDistanceToSlowDown * 2.0f)
+                            {
+                                referenceMover.rightLaneAvailable = false;
+                            }
+                        }
+                    }
+
+                    if(referenceMover.StopProbbing())
+                    {
+                        break;
+                    }
+                }
+            })
+            .Schedule(inputDependencies);
+        jobHandle.Complete();
+        movers.Dispose();
+
+        return jobHandle;
     }
 }
