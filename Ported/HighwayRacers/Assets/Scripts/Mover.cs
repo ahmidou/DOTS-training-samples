@@ -36,6 +36,11 @@ public struct Mover : IComponentData
 
     public float frontCarSpeed;
 
+    // xxxFrontCarIndex valid when xxxLaneAvailable is valid
+    public int leftLaneFrontCarIndex;
+    public int currentLaneFrontCarIndex;
+    public int rightLaneFrontCarIndex;
+
     public bool StopProbbing()
     {
         return leftLaneAvailable == false &&
