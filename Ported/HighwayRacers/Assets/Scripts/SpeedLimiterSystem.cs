@@ -34,9 +34,28 @@ public class SpeedLimiter : JobComponentSystem
                     //mine.speed = math.max(mine.frontCarSpeed, mine.speed *(mine.frontCarDistance / track.minDistanceToSlowDown + 1));
                     mine.speed = mine.frontCarSpeed;
                 }
-                else   
+                else if (mine.drivingBehavior == Mover.DrivingBehavior.Overtake)
                 {
-                    mine.speed = mine.baseSpeed;
+                    mine.speed = mine.baseSpeed * 1.2f;
+                }
+                else if (mine.speed != mine.baseSpeed)
+                {
+                    if (mine.speed > mine.baseSpeed)
+                    {
+                        mine.speed -= 0.05f;
+                        if (mine.speed < mine.baseSpeed)
+                        {
+                            mine.speed = mine.baseSpeed;
+                        }
+                    }
+                    else
+                    {
+                        mine.speed += 0.05f;
+                        if (mine.speed > mine.baseSpeed)
+                        {
+                            mine.speed = mine.baseSpeed;
+                        }
+                    }
                 }
             })
             .Schedule(inputDependencies);
