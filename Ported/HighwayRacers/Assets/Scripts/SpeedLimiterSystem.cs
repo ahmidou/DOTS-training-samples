@@ -31,8 +31,8 @@ public class SpeedLimiter : JobComponentSystem
                 if (mine.drivingBehavior == Mover.DrivingBehavior.LimitSpeed)
                 {
                     //mine.speed = math.lerp(mine.frontCarSpeed, mine.speed, mine.frontCarDistance / track.minDistanceToSlowDown);
-                    mine.speed = math.max(mine.frontCarSpeed, mine.speed *(mine.frontCarDistance / track.minDistanceToSlowDown));
-
+                    //mine.speed = math.max(mine.frontCarSpeed, mine.speed *(mine.frontCarDistance / track.minDistanceToSlowDown + 1));
+                    mine.speed = mine.frontCarSpeed;
                 }
                 else   
                 {
