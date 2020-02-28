@@ -33,6 +33,7 @@ public struct Mover : IComponentData
     public bool rightLaneAvailable;
 
     public float frontCarSpeed;
+    public float frontCarDistance;
 
     public bool StopProbbing()
     {

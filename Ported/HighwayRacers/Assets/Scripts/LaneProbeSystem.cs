@@ -48,6 +48,9 @@ public class LaneProbeSystem : JobComponentSystem
                             if (d > 0 && d < smallestDistanceToBrake)
                             {
                                 referenceMover.currentLaneAvailable = false;
+                                referenceMover.frontCarSpeed = movers[i].speed;
+                                referenceMover.frontCarDistance = movers[i].distanceOnLane - referenceMover.distanceOnLane;
+
                             }
                         }
                     }

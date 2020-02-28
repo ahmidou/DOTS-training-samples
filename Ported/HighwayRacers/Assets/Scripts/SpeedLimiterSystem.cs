@@ -30,27 +30,11 @@ public class SpeedLimiter : JobComponentSystem
             {
                 if (mine.drivingBehavior == Mover.DrivingBehavior.LimitSpeed)
                 {
-                    float smallest = track.minDistanceToSlowDown;
-                    int closest = -1;
-                    for (int i = 0; i < movers.Length; i++)
-                    {
-                        if (movers[i].distanceOnLane != mine.distanceOnLane && movers[i].currentLane == mine.currentLane)
-                        {
-                            float d = movers[i].distanceOnLane - mine.distanceOnLane;
-                            if (d > 0 && d < smallest)
-                            {
-                                smallest = d;
-                                closest = i;
-                            }
-                        }
-                    }
+                    //mine.speed = math.lerp(mine.frontCarSpeed, mine.speed, mine.frontCarDistance / track.minDistanceToSlowDown);
+                    mine.speed = math.max(mine.frontCarSpeed, mine.speed *(mine.frontCarDistance / track.minDistanceToSlowDown));
 
-                    if (closest >= 0)
-                    {
-                        mine.speed = movers[closest].speed;
-                    }
                 }
-                else
+                else   
                 {
                     mine.speed = mine.baseSpeed;
                 }
