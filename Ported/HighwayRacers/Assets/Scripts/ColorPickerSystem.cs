@@ -32,14 +32,17 @@ public class ColorPickerSystem : JobComponentSystem
                  var grey = new float4(0.5f, 0.5f, 0.5f, 1.0f);
                  var red = new float4(1.0f, 0.0f, 0.0f, 1.0f);
                  var green = new float4(0.0f, 1.0f, 0.0f, 1.0f);
+                 
+                 if (mine.drivingBehavior == Mover.DrivingBehavior.LimitSpeed)
+                 {
+                     //Debug.Log(mine.frontCarSpeed / mine.baseSpeed);
+                     //color.Value = math.lerp(grey, red, math.min((mine.baseSpeed - mine.speed) * 0.07f, 1.0f));
+                     color.Value = math.lerp(grey, red, mine.frontCarSpeed / mine.baseSpeed);
 
-                 if (mine.speed < mine.baseSpeed)
-                 {
-                     color.Value = math.lerp(grey, red, math.min((mine.baseSpeed - mine.speed) * 0.07f, 1.0f));
                  }
-                 else if (mine.speed > mine.baseSpeed)
+                 else if (mine.drivingBehavior == Mover.DrivingBehavior.Overtake)
                  {
-                     color.Value = math.lerp(grey, green, math.min(math.abs(mine.baseSpeed - mine.speed) * 0.07f, 1.0f));
+                     color.Value = math.lerp(grey, green, mine.baseSpeed * 1.5f / mine.baseSpeed);
                  }
                  else
                  {
