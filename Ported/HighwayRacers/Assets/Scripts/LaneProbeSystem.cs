@@ -49,7 +49,6 @@ public class LaneProbeSystem : JobComponentSystem
                             float d = normalizedDistance - currentNormalizedDistance;
                             if (d > 0 && d < smallestDistanceToBrake)
                             {
-                                referenceMover.currentLaneFrontCarIndex = i;
                                 referenceMover.currentLaneAvailable = false;
                             }
                         }
@@ -63,7 +62,6 @@ public class LaneProbeSystem : JobComponentSystem
                             float d = normalizedDistance - currentNormalizedDistance;
                             if (abs(d) < smallestDistanceToBrake * 3.0f)
                             {
-                                referenceMover.leftLaneFrontCarIndex = i;
                                 referenceMover.leftLaneAvailable = false;
                             }
                         }
@@ -77,7 +75,6 @@ public class LaneProbeSystem : JobComponentSystem
                             float d = normalizedDistance - currentNormalizedDistance;
                             if (abs(d) < smallestDistanceToBrake * 3.0f)
                             {
-                                referenceMover.rightLaneFrontCarIndex = i;
                                 referenceMover.rightLaneAvailable = false;
                             }
                         }
@@ -95,7 +92,6 @@ public class LaneProbeSystem : JobComponentSystem
                                 float d = normalizedDistance - futureNormalizedDistance;
                                 if (d > 0 && d < smallestDistanceToBrake)
                                 {
-                                    referenceMover.currentLaneFrontCarIndex = i;
                                     referenceMover.currentLaneAvailable = false;
                                 }
                             }
@@ -109,7 +105,6 @@ public class LaneProbeSystem : JobComponentSystem
                                 float d = normalizedDistance - futureNormalizedDistance;
                                 if (abs(d) < smallestDistanceToBrake * 3.0f)
                                 {
-                                    referenceMover.leftLaneFrontCarIndex = i;
                                     referenceMover.leftLaneAvailable = false;
                                 }
                             }
@@ -123,7 +118,6 @@ public class LaneProbeSystem : JobComponentSystem
                                 float d = normalizedDistance - futureNormalizedDistance;
                                 if (abs(d) < smallestDistanceToBrake * 3.0f)
                                 {
-                                    referenceMover.rightLaneFrontCarIndex = i;
                                     referenceMover.rightLaneAvailable = false;
                                 }
                             }
