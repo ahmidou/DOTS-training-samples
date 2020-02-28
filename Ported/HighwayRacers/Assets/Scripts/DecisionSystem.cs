@@ -38,23 +38,47 @@ public class DecisionSystem : JobComponentSystem
 
             if(myMover.futureLane == myMover.currentLane)
             {
-                if (myMover.rightLaneAvailable)
+                if (myMover.behaviorStayOnLane)
                 {
-                    myMover.drivingBehavior = Mover.DrivingBehavior.MergeRight;
-                    myMover.futureLane--;
-                }
-                else if (myMover.currentLaneAvailable)
-                {
-                    myMover.drivingBehavior = Mover.DrivingBehavior.Regular;
-                }
-                else if (myMover.leftLaneAvailable)
-                {
-                    myMover.drivingBehavior = Mover.DrivingBehavior.Overtake;
-                    myMover.futureLane++;
+                    if (myMover.currentLaneAvailable)
+                    {
+                        myMover.drivingBehavior = Mover.DrivingBehavior.Regular;
+                    }
+                    else if (myMover.leftLaneAvailable)
+                    {
+                        myMover.drivingBehavior = Mover.DrivingBehavior.Overtake;
+                        myMover.futureLane++;
+                    }
+                    else if (myMover.rightLaneAvailable)
+                    {
+                        myMover.drivingBehavior = Mover.DrivingBehavior.MergeRight;
+                        myMover.futureLane--;
+                    }
+                    else
+                    {
+                        myMover.drivingBehavior = Mover.DrivingBehavior.LimitSpeed;
+                    }
                 }
                 else
                 {
-                    myMover.drivingBehavior = Mover.DrivingBehavior.LimitSpeed;
+                    if (myMover.rightLaneAvailable)
+                    {
+                        myMover.drivingBehavior = Mover.DrivingBehavior.MergeRight;
+                        myMover.futureLane--;
+                    }
+                    else if (myMover.currentLaneAvailable)
+                    {
+                        myMover.drivingBehavior = Mover.DrivingBehavior.Regular;
+                    }
+                    else if (myMover.leftLaneAvailable)
+                    {
+                        myMover.drivingBehavior = Mover.DrivingBehavior.Overtake;
+                        myMover.futureLane++;
+                    }
+                    else
+                    {
+                        myMover.drivingBehavior = Mover.DrivingBehavior.LimitSpeed;
+                    }
                 }
             }
         }

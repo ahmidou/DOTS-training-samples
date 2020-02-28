@@ -14,7 +14,7 @@ public class HighWay : MonoBehaviour
     public int carCount = 20;
     public float minSpeed = 1.0f/10.0f;
     public float maxSpeed = 5.0f / 10.0f;
-    public float minDistanceToSlowDown = 2.0f;
+    public float minDistanceToSlowDown = 3.0f;
     public float laneDistanceMultiplier = 1.03f;
 
     // Start is called before the first frame update
@@ -49,7 +49,7 @@ public class HighWay : MonoBehaviour
             entityManager.AddComponent<Mover>(instance);
             entityManager.AddComponent<MaterialColor>(instance);
             int currentLane = UnityEngine.Random.Range(0, laneCount);
-            entityManager.SetComponentData(instance, new Mover { speed = speed, distanceOnLane=position.x, currentLane = currentLane, futureLane = currentLane, baseSpeed=speed, laneChangeSpeed=1, laneChangeRatio=0 });
+            entityManager.SetComponentData(instance, new Mover { speed = speed, distanceOnLane=position.x, currentLane = currentLane, futureLane = currentLane, baseSpeed=speed, laneChangeSpeed=1, laneChangeRatio=0, behaviorStayOnLane=x%2==1 });
             entityManager.SetComponentData(instance, new Translation { Value = position });
         }
     }
