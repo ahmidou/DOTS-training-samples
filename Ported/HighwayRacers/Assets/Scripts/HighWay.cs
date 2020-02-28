@@ -14,7 +14,7 @@ public class HighWay : MonoBehaviour
     public int carCount = 20;
     public float minSpeed = 1.0f/10.0f;
     public float maxSpeed = 5.0f / 10.0f;
-    public float minDistanceToSlowDown = 2.0f;
+    public float minDistanceToSlowDown = 3.0f;
     public float laneDistanceMultiplier = 1.03f;
 
     // Start is called before the first frame update
