@@ -38,8 +38,11 @@ public class MoverSystem : JobComponentSystem
             //  translation.Value += mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
 
             mover.distanceOnLane += mover.speed * deltaTime;
-            if (track.length < mover.distanceOnLane)
-                mover.distanceOnLane = 0;
+            while (track.length < mover.distanceOnLane)
+            {
+                mover.distanceOnLane -= track.length;
+            }
+
            // Debug.Log(mover.distanceOnLane);            
         }
     }
