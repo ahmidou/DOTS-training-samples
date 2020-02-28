@@ -26,6 +26,8 @@ public struct Mover : IComponentData
     public float laneChangeRatio;
     public float distanceOnLane;
 
+    public bool behaviorStayOnLane;
+
     public DrivingBehavior drivingBehavior;
 
     public bool leftLaneAvailable;
